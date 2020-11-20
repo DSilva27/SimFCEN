@@ -10,5 +10,5 @@
 .navbar a:hover{
     -webkit-transform: scale(1.05);
     transform: scale(1.05);
-    color: #f2f2fc;
+    color: #000000;
 }

@@ -10,8 +10,8 @@ html, body {
 }
 
 .content{
-    background-image: hsl(120,60%,70%) url(images/background.jpg);
-    background-size: 100%;
+    background-image: url(../images/background_bright.jpg);
+    background-size: 70%;
     position: fixed;
     display: block;
     min-height: 100vh;
@@ -27,7 +27,7 @@ html, body {
 .content h1{
     font-family: 'Rubik', sans-serif;
     position: relative;
-    color: #ffffff;
+    color: #000000;
     font-size: 64px;
     line-height: 1;
     font-weight: 600;
@@ -38,7 +38,7 @@ html, body {
 
 .content p{
     position: relative;
-    color: #e9e9e9;
+    color: #000000;
     margin-bottom: 5%;
     text-align: center;
     font-size: 24px;
@@ -50,7 +50,7 @@ html, body {
     margin: auto;
     display: block;
     text-align: center;
-    background-color: #FF0060;;
+    background-color: #41c912;;
     color: #fff;
     height: 50px;
     font-size: 16px;
@@ -87,6 +87,7 @@ html, body {
     background-color: #FFFF;;
     font-family: 'Rubik', sans-serif;
     padding-left: 10%;
+    white-space: nowrap;
 }
 
 .navbar .navbar-brand{
@@ -98,7 +99,7 @@ html, body {
 }
 
 .navbar a:hover{
-    color: #f2f2fc;
+    color: #000000;
 }
 
 .navbar .navbar-nav{
@@ -110,7 +111,7 @@ html, body {
 }
 
 .navbar .navbar-nav .nav-item:hover{
-    background-color: #ff0060;
+    background-color: #2aa200;
     border-radius: 40px;
     -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
