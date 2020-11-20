@@ -1,0 +1,14 @@
+.navbar{
+    background-color:  #FFFFF ;
+}
+
+.navbar a{
+    color:  #2aa200;
+    white-space: nowrap;
+}
+
+.navbar a:hover{
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+    color: #f2f2fc;
+}
