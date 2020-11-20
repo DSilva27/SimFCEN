@@ -1,5 +1,5 @@
+
 class doublePendulum {
-	//debemos ingresar las posiciones de los imanes
 	constructor(initCond,color=255){
         this.l1= 1.0,
         this.l2= 1.0,
@@ -7,25 +7,17 @@ class doublePendulum {
         this.m2= 1.0,
         this.g= 10.0,
         this.hinge= [240,80],
-        this.scaling_factor= 30, 
+        this.scaling_factor= 100,
         this.dt=0.0001,
         this.speed= 250
-        
-        // agregando partes para el iman 
-        this.nx = [-2, 0, 0, 2];
-        this.ny = [0, 2 , -2, 0];
-        this.d = 0.2;
-        this.R = 0.07;
-        this.C = 0.2;
 
-        this.initCond = initCond;
+		this.initCond = initCond;
         this.t = 0;
-        //this.ball1 = [this.l1*Math.sin(initCond[2]),this.l1*Math.cos(initCond[2])];
-        this.ball1 = [ initCond[0], initCond[2] ];
-        this.ball2 = [0, 0]; 
-        this.radius1 = 18; //radio de la esfera a dibujar
+		this.ball1 = [this.l1*Math.sin(initCond[2]),this.l1*Math.cos(initCond[2])];
+		this.ball2 = [this.ball1[0] + this.l2*Math.sin(initCond[3]),this.ball1[1] + this.l2*Math.cos(initCond[3])];
+        this.radius1 = 18;
         this.radius2 = 20;
-        this.history = [];
+		this.history = [];
         this.color = color;
         this.timeWindow = [];
         this.timeSeriesValues = [];
@@ -38,6 +30,7 @@ class doublePendulum {
         //console.log("show(): "+this.initCond[2]);
 		//hinge
 		canvas.rect(this.hinge[0]-5,this.hinge[1]-5,10,10,2);
+
 		// first ball
         canvas.noStroke();
 		canvas.fill(this.color);
@@ -52,25 +45,29 @@ class doublePendulum {
 		//second ball
         canvas.noStroke();
 		canvas.fill(this.color);
-		// canvas.ellipse(this.hinge[0]+this.scaling_factor*this.ball2[0],
-			  //this.hinge[1] + this.scaling_factor*this.ball2[1],this.radius2);
+		canvas.ellipse(this.hinge[0]+this.scaling_factor*this.ball2[0],
+			  this.hinge[1] + this.scaling_factor*this.ball2[1],this.radius2);
 		//second rod
         canvas.stroke(this.color)
-		//canvas.line(this.hinge[0]+this.scaling_factor*this.ball1[0],this.hinge[1] + this.scaling_factor*this.ball1[1],            		  			this.hinge[0]+this.scaling_factor*this.ball2[0],this.hinge[1] + this.scaling_factor*this.ball2[1]);
+		canvas.line(this.hinge[0]+this.scaling_factor*this.ball1[0],this.hinge[1] + this.scaling_factor*this.ball1[1],             		  			this.hinge[0]+this.scaling_factor*this.ball2[0],this.hinge[1] + this.scaling_factor*this.ball2[1]);
 	}
 
-    sysDiffEq(y){
-        //console.log("PRIMERA: ", y)
-        var px = y[0], vx = y[1], py = y[2], vy = y[3]
-        
-        var dpx = vx;
-        var dvx = suma([...Array(this.nx.length).keys()].map(i => (this.nx[i] - px)/Math.pow(((this.nx[i]-px)**2 + (this.ny[i]-py)**2 + this.d**2), 1.5)))-this.R*vx-this.C*px;
-        var dpy = vy;
-        var dvy = suma([...Array(this.nx.length).keys()].map(i => (this.ny[i] - py)/Math.pow(((this.nx[i]-px)**2 + (this.ny[i]-py)**2 + this.d**2), 1.5)))-this.R*vy-this.C*py;
-        
-        //console.log('DPX: ', dpx, ' DPY: ', dpy)
-        return [dpx, dvx, dpy, dvy]
-    }
+	sysDiffEq(x){
+	  let dx = Array(4);
+	  let cosine = Math.cos(x[2] - x[3]);
+	  let sine = Math.sin(x[2]- x[3]);
+	  let relmass = this.m2/(this.m1+this.m2);
+	  let length_ratio = this.l2/this.l1;
+
+	  dx[0] = (this.g*Math.sin(x[3])*cosine- cosine*sine*Math.pow(x[0],2) - length_ratio*sine*Math.pow(x[1],2)-1/relmass/		     			this.l1*this.g*Math.sin(x[2]))/(1/relmass -Math.pow(cosine,2)); // derivative of the angular velocity for the first angle
+
+	  dx[1] = 1/length_ratio*(sine*Math.pow(x[0],2)-cosine*dx[0])-this.g/this.l2*Math.sin(x[3]); // derivative of the angular velocity for 															the second angle
+
+	  dx[2] = x[0]; // derivative of the first angle
+
+	  dx[3] = x[1]; // derivative of the second angle
+	   return dx
+	}
 
 	Euler(){
 	let dim = this.initCond.length; //dimension of the system
@@ -132,13 +129,10 @@ class doublePendulum {
 
 	move(solver){
 		//updating the positions
-		//this.ball1[0] = this.l1*Math.sin(this.initCond[2]);
-		//this.ball1[1] = this.l1*Math.cos(this.initCond[2]);
+		this.ball1[0] = this.l1*Math.sin(this.initCond[2]);
+		this.ball1[1] = this.l1*Math.cos(this.initCond[2]);
 		this.ball2[0] = this.ball1[0] + this.l2*Math.sin(this.initCond[3]);
 		this.ball2[1] = this.ball1[1] + this.l2*Math.cos(this.initCond[3]);
-
-		this.ball1[0] = this.initCond[0]; //posicion x del pendulo
-		this.ball1[1] = this.initCond[2];
 
 		//choosing solver and time-evolution of the eoms
 		if (solver === "RK") {
@@ -155,8 +149,8 @@ class doublePendulum {
 	}
 
     drawTrace(canvas,trace_length){ //keep track of the trajectory
-		let pos = createVector(this.hinge[0]+this.scaling_factor*this.ball1[0],
-		  this.hinge[1]+this.scaling_factor*this.ball1[1]);
+		let pos = createVector(this.hinge[0]+this.scaling_factor*this.ball2[0],
+		  this.hinge[1]+this.scaling_factor*this.ball2[1]);
 
 	  	this.history.push(pos);
 		if(this.history.length>trace_length){
@@ -276,22 +270,13 @@ let ppCheckboxContainer2;
 let isPlaying = false;
 let chaosIsPlaying = false;
 
-function suma(array){
-        sum = 0
-        for (var i in array){
-            sum += array[i]
-        }
-        return sum
-}
 
 function manyPendulums(numberOfPendulums){
   let pendulums = [];
   for (let i=0;i<numberOfPendulums;i++){
     randomcolor = randomRGB();
     initColor = color(randomcolor[0],randomcolor[1],randomcolor[2])
-    //condiciones iniciales [-6.45843, 0.1, 0.000351, 0.1]
-    //pendulums.push(new doublePendulum([0.0,0.0,Math.PI/4,Math.PI/1.5+i*0.01],initColor));
-    pendulums.push(new doublePendulum([-6.45843, 0.1, 0.000351, 0.1],initColor));
+    pendulums.push(new doublePendulum([0.0,0.0,Math.PI/4,Math.PI/1.5+i*0.01],initColor));
   }
   return pendulums;
 }
@@ -352,7 +337,7 @@ function defaultWindow(){
   plotCanvas2_extra.strokeWeight(1)
   plotCanvas2_extra.noFill()
 
-  dp = new doublePendulum([-6.45843, 0.1, 0.000351, 0.1])
+  dp = new doublePendulum([0,0,Math.PI/3,Math.PI])
 
 }
 
@@ -362,21 +347,21 @@ function setup() {
 
   defaultWindow();
   let dd = makeDropdown(bgCanvas);
-  dd.setLabel("Opciones");
+  dd.setLabel("Settings");
   setDropdownStyle(bgCanvas);
   let control = makeItem(dd);
-  control.setLabel("Controles");
+  control.setLabel("Control");
   let controlRow1 = makeRow(control);
 
   let controlButtons = new buttonContainer(controlRow1);
-  let startButton = controlButtons.makeButton("Iniciar",function(){isPlaying=true});
-  let stopButton = controlButtons.makeButton("Parar",function(){isPlaying=false});
-  let resetButton = controlButtons.makeButton("Reiniciar",resetFunc);
+  let startButton = controlButtons.makeButton("Start",function(){isPlaying=true});
+  let stopButton = controlButtons.makeButton("Stop",function(){isPlaying=false});
+  let resetButton = controlButtons.makeButton("Reset",resetFunc);
 
   let controlRow2 = makeRow(control);
   let speedSliderContainer = makeSlider(controlRow2);
   let speedSlider = speedSliderContainer['slider'];
-  speedSliderContainer.setTitleLabel("Velocidad de simulación");//Updates the text on the left hand side of the slider.
+  speedSliderContainer.setTitleLabel("Speed of simulation");//Updates the text on the left hand side of the slider.
   speedSliderContainer.setParameters(280, 50, 5, 230);
   speedSlider.oninput = () => {
     speedSliderContainer["valueLabel"].innerHTML = Number(speedSlider.value).toFixed(2);
@@ -384,7 +369,7 @@ function setup() {
   }
 
   let parameters = makeItem(dd);
-  parameters.setLabel("Parametros");
+  parameters.setLabel("Parameters");
   let parametersRow1 = makeRow(parameters);
 
   let m1sliderContainer = makeSlider(parametersRow1);
@@ -423,7 +408,7 @@ function setup() {
 
 
   let solvers = makeItem(dd);
-  solvers.setLabel("Solucionadores");
+  solvers.setLabel("Solvers");
 
   solversRow1 = makeRow(solvers);
 
@@ -448,11 +433,11 @@ function setup() {
   }
 
   let chaos = makeItem(dd);
-  chaos.setLabel("CAOS");
+  chaos.setLabel("CHAOS");
   let chaosRow1 = makeRow(chaos);
 
   chaosCheckboxContainer = makeCheckbox(chaosRow1);
-  chaosCheckboxContainer.setLabel("Mostrar CAOS");
+  chaosCheckboxContainer.setLabel("Show CHAOS");
   let chaosCheckbox = chaosCheckboxContainer['checkbox'];
 
   chaosCheckbox.onclick = () => {
@@ -479,20 +464,20 @@ function setup() {
   let chaosRow2 = makeRow(chaos);
 
   let chaosButtons = new buttonContainer(chaosRow2);
-  let chaosStartButton = chaosButtons.makeButton("Iniciar",function(){chaosIsPlaying=true});
-  let chaosStopButton = chaosButtons.makeButton("Parar",function(){chaosIsPlaying=false});
-  let chaosResetButton = chaosButtons.makeButton("Reiniciar", () => {pendulums = manyPendulums(5)});
+  let chaosStartButton = chaosButtons.makeButton("Start",function(){chaosIsPlaying=true});
+  let chaosStopButton = chaosButtons.makeButton("Stop",function(){chaosIsPlaying=false});
+  let chaosResetButton = chaosButtons.makeButton("Reset", () => {pendulums = manyPendulums(5)});
 
   let plots = makeItem(dd)
-  plots.setLabel("Gráficas adicionales");
+  plots.setLabel("Additional graphs");
   let plotsRow1 = makeRow(plots);
 
   ppCheckboxContainer1 = makeCheckbox(plotsRow1);
   //let ppCheckbox1 = ppCheckboxContainer1['checkbox'];
   ppCheckboxContainer2 = makeCheckbox(plotsRow1);
   //let ppCheckbox2 = ppCheckboxContainer2['checkbox'];
-  ppCheckboxContainer1.setLabel("Retrato de fase 1");
-  ppCheckboxContainer2.setLabel("Retrato de fase 2");
+  ppCheckboxContainer1.setLabel("Phase portrait 1");
+  ppCheckboxContainer2.setLabel("Phase portrait 2");
 
 }
 
@@ -539,8 +524,8 @@ function draw() {
 
   if (ppCheckbox1.checked === true){ //draw upper phase portrait
     dp.plotPhasePortrait(plotCanvas1_extra,[2,0],200,[20,15],[Wplot/2,Hplot/2],dp.ppHistory1)
-    text("Velocidad Angular 1",Wsim-Wplot-140,30)
-    text("Ángulo 1",Wsim-60,Hplot+30)
+    text("Angular velocity1",Wsim-Wplot-140,30)
+    text("Angle1",Wsim-60,Hplot+30)
     image(plotCanvas1, Wsim-Wplot-30,14)
     image(plotCanvas1_extra, Wsim-Wplot-30,14)
   }
@@ -549,8 +534,8 @@ function draw() {
   if (ppCheckbox2.checked === true){
   //drawing bottom phase portrait
   dp.plotPhasePortrait(plotCanvas2_extra,[3,1],200,[5,10],[Wplot/2,Hplot/2],dp.ppHistory2)
-    text("Velocidad Angular 2",Wsim-Wplot-140,Hplot+30);
-    text("Ángulo 2",Wsim-60,2*Hplot+47);
+    text("Angular velocity2",Wsim-Wplot-140,Hplot+30);
+    text("Angle2",Wsim-60,2*Hplot+47);
     image(plotCanvas2, Wsim-Wplot-30,Hplot+35);
     image(plotCanvas2_extra, Wsim-Wplot-30,Hplot+35);
   }
@@ -586,9 +571,9 @@ function draw() {
 
   //plot labels
   fill(255)
-  text("Ángulo 1",30,Hplot+70)
-  text("Tiempo",Wplot3,Hplot+88+Hplot3)
-  text("Escoge una posición inicial!",30,30);
+  text("Angle1",30,Hplot+70)
+  text("time",Wplot3,Hplot+88+Hplot3)
+  text("Give initial position by dragging!",30,30);
 
   image(simCanvas, 0, 0);
   image(plotCanvas3, 30, Hplot + 75)
