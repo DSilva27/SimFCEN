@@ -51,7 +51,7 @@ const simulations = [{
   "explanation": getFile("nBodyExplanation.ejs"),
   "labels": ["mechanics", "collision"],
 },{
-  "name": "Double pendulum 2D",
+  "name": "Magnetic pendulum",
   "description": "A pendulum with another pendulum attached to its end.",
   "urlName": "doublePendulum2D",
   "jsfile": "doublePendulum2D",
