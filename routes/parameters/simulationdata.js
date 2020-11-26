@@ -10,7 +10,7 @@ const simulations = [{
   "image": "doublePendulum2D.png",
   "explanation": "-",
   "labels":["mechanics", "pendulum", "WIP"],
-}}];
+}];
 
 
 function getFile(filename) {
