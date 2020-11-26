@@ -1,8 +1,8 @@
 # SimFCEN
 ## Colaboradores: 
 
-### Desarrollo de la página web: David Silva Sánchez, Juan Pablo Marulanda 
-### Péndulo Magnético: Nicole Rivera Parra, Brayan Alexander Muñoz Barrera, Andrés David Arteaga Villareal
+#### Desarrollo de la página web: David Silva Sánchez, Juan Pablo Marulanda 
+#### Péndulo Magnético: Nicole Rivera Parra, Brayan Alexander Muñoz Barrera
 
 Esta página está basada en el trabajo hecho por [The Physics Hub](https://github.com/ThePhysHub/ThePhysicsHub). Los códigos usados para desarrollar la página web están basados en sus códigos y los códigos de simulación fueron hechos gracias a sus plantillas. A continuación se anexa el README original, en el cuál se encuentran instrucciones sobre como añadir simulaciones y una pequeña guía para crear marcos de graficación en JavaScript.
 
