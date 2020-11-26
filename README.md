@@ -1,3 +1,15 @@
+# SimFCEN
+## Colaboradores: 
+
+### Desarrollo de la página web: David Silva Sánchez, Juan Pablo Marulanda 
+### Péndulo Magnético: Nicole Rivera Parra, Brayan Alexander Muñoz Barrera, Andrés David Arteaga Villareal
+
+Esta página está basada en el trabajo hecho por [The Physics Hub](https://github.com/ThePhysHub/ThePhysicsHub). Los códigos usados para desarrollar la página web están basados en sus códigos y los códigos de simulación fueron hechos gracias a sus plantillas. A continuación se anexa el README original, en el cuál se encuentran instrucciones sobre como añadir simulaciones y una pequeña guía para crear marcos de graficación en JavaScript.
+
+Si se tiene alguna duda sobre el desarrollo de la página web se puede escribir a david.silvas@udea.edu.co ó juan.marulandas@udea.edu.co.
+
+La página web está montada en el servidor Heroku: [SimFCEN](simfcen.herokuapp.com/)
+
 # The Physics Hub
 
 The Physics Hub is a website built by physics enthusiasts from a range of backgrounds,
