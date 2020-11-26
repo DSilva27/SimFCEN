@@ -17,6 +17,6 @@ for line in lines:
     else:
         newAppjs.write(line)
 
-os.remove(f".routes/{urlName}")
+os.remove(f"./routes/{urlName}.js")
 os.remove(f"./public/javascript/{urlName}.js")
 print(f"Done! removed ./routes/{urlName}.js and ./public/javascripts/{urlName}.js. Please delete your simulation data in routes/parameters/simulationdata!")
