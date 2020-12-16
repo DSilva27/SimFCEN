@@ -8,7 +8,7 @@ Esta página está basada en el trabajo hecho por [The Physics Hub](https://gith
 
 Si se tiene alguna duda sobre el desarrollo de la página web se puede escribir a david.silvas@udea.edu.co ó juan.marulandas@udea.edu.co.
 
-La página web está montada en el servidor Heroku: [SimFCEN](simfcen.herokuapp.com/)
+La página web está montada en el servidor Heroku: [SimFCEN](https://simfcen.herokuapp.com/)
 
 # The Physics Hub
 
