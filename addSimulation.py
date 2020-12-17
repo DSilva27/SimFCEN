@@ -6,7 +6,7 @@ def createRouter(urlName):
     """
     print("Creating router")
     router = open(f"./routes/{urlName}.js", "w+")
-    router.write("const express = require('express\);\n") 
+    router.write("const express = require('express');\n") 
     router.write("const router = express.Router();\n")
     router.write("const simArray = require('./parameters/simulationdata');\n")
     router.write('const index = simArray.findIndex(function (i) { return i.urlName == "' + urlName + '" });\n')
